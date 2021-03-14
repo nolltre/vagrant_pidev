@@ -96,13 +96,15 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider "virtualbox" do |vb|
-    # Make sure there are more cores available (as many as nproc reports)
-    vb.cpus = %x{nproc}
+    # Make sure there are more cores available (as many as nproc reports) or
+    # 1 if nproc fails (e.g. on non-Linux hosts)
+    vb.cpus = %x{nproc} or "1"
 
     # Customise the amount of memory on the VM (quarter of the amount on a
     # Linux PC) or 1024 if the command can't be executed (e.g. if running on a
     # non-Linux host):
-    vb.memory = %x{awk '$1 == "MemTotal:" {printf "%d",$2 / 4096}' /proc/meminfo}
+    vb.memory = %x{awk '$1 == "MemTotal:" {printf "%d",$2 / 4096}' \
+                /proc/meminfo} or "1024"
   end
 
 end
