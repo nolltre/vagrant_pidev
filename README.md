@@ -1,5 +1,6 @@
-# Pi Dev
-This is a Vagrantconfig for spinning up an Ubuntu development environment for crosscompiling the Linux kernel (or any other cross-compiling)
+# Vagrant Pi Dev
+This is a Vagrantconfig for spinning up an Ubuntu development environment for
+cross compiling the Linux kernel (or any other cross compiling need)
 
 ## Usage
 `vagrant up` spins up two boxes, one 32-bit and one 64-bit.  
