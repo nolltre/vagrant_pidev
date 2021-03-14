@@ -62,10 +62,6 @@ Vagrant.configure("2") do |config|
   # your network.
   # config.vm.network "public_network"
 
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
   config.vm.provision "shell", inline: <<-SHELL
      apt-get update
      apt -y install git bc bison flex libssl-dev make libc6-dev libncurses5-dev
@@ -84,7 +80,7 @@ Vagrant.configure("2") do |config|
       vb32.name = "Xenial32 for Pi Development"
     end
 
-    dev32.vm.provision :shell, inline: "apt install -y crossbuild-essential-arm64"
+    dev32.vm.provision :shell, inline: "apt install -y crossbuild-essential-armhf"
     dev32.vm.post_up_message = $msg32
   end
 
@@ -95,7 +91,7 @@ Vagrant.configure("2") do |config|
       vb64.name = "Xenial64 for Pi Development"
     end
 
-    dev64.vm.provision :shell, inline: "apt install -y crossbuild-essential-armhf"
+    dev64.vm.provision :shell, inline: "apt install -y crossbuild-essential-arm64"
     dev64.vm.post_up_message = $msg64
   end
 
@@ -103,7 +99,9 @@ Vagrant.configure("2") do |config|
     # Make sure there are more cores available (as many as nproc reports)
     vb.cpus = %x{nproc}
 
-    # Customise the amount of memory on the VM (quarter of the amount in the PC):
+    # Customise the amount of memory on the VM (quarter of the amount on a
+    # Linux PC) or 1024 if the command can't be executed (e.g. if running on a
+    # non-Linux host):
     vb.memory = %x{awk '$1 == "MemTotal:" {printf "%d",$2 / 4096}' /proc/meminfo}
   end
 
